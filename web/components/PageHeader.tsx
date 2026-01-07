@@ -137,7 +137,7 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
           ))}
           
           <a 
-            href="https://github.com/apron-design"
+            href="https://github.com/mitkimi/apron-react-bits"
             target="_blank"
             rel="noopener noreferrer"
             className="page-header-icon-button"
