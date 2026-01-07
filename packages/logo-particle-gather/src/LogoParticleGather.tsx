@@ -196,61 +196,6 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
       const imageData = ctx.getImageData(0, 0, imgWidth, imgHeight).data;
       const points: Particle[] = [];
 
-      // 计算聚集中心位置（用于展开时的散开中心）
-      // 默认使用容器中心
-      let centerX = containerWidth / 2;
-      let centerY = containerHeight / 2;
-
-      if (gatherPosition) {
-        if (typeof gatherPosition === 'object') {
-          centerX = parseValue(gatherPosition.x, 'width');
-          centerY = parseValue(gatherPosition.y, 'height');
-        } else {
-          // 预设位置的中心点
-          switch (gatherPosition) {
-            case 'center':
-              centerX = window.innerWidth / 2;
-              centerY = window.innerHeight / 2;
-              break;
-            case 'top-left':
-              centerX = 0;
-              centerY = 0;
-              break;
-            case 'top-right':
-              centerX = window.innerWidth;
-              centerY = 0;
-              break;
-            case 'bottom-left':
-              centerX = 0;
-              centerY = window.innerHeight;
-              break;
-            case 'bottom-right':
-              centerX = window.innerWidth;
-              centerY = window.innerHeight;
-              break;
-            case 'left-center':
-              centerX = window.innerHeight / 2;
-              centerY = window.innerHeight / 2;
-              break;
-            case 'right-center':
-              centerX = window.innerWidth - window.innerHeight / 2;
-              centerY = window.innerHeight / 2;
-              break;
-            case 'top-center':
-              centerX = window.innerWidth / 2;
-              centerY = 0;
-              break;
-            case 'bottom-center':
-              centerX = window.innerWidth / 2;
-              centerY = window.innerHeight;
-              break;
-            default:
-              centerX = window.innerWidth / 2;
-              centerY = window.innerHeight / 2;
-          }
-        }
-      }
-
       // 用于检查点是否重叠的辅助函数
       const checkOverlap = (
         x: number,
