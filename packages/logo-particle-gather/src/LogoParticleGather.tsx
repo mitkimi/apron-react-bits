@@ -315,8 +315,10 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         // 在容器范围内随机分布
         // 先为粒子生成随机大小（用于重叠检测）
         const particleSize = Math.random() * (maxSize - minSize) + minSize;
-        let originX: number;
-        let originY: number;
+        const margin = particleSize / 2;
+        // 初始化默认位置（容器中心）
+        let originX: number = spreadWidth / 2;
+        let originY: number = spreadHeight / 2;
         let attempts = 0;
 
         // 尝试生成不重叠的位置
@@ -326,7 +328,6 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
           // 确保粒子能分布到所有象限（左上、右上、左下、右下）
           // 使用均匀随机分布，确保每个区域都有粒子
           // 直接生成在容器范围内的随机坐标
-          const margin = particleSize / 2;
           originX = margin + Math.random() * (spreadWidth - margin * 2);
           originY = margin + Math.random() * (spreadHeight - margin * 2);
 
@@ -343,7 +344,6 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
 
         // 如果找不到不重叠的位置，使用最后一次尝试的位置（允许轻微重叠）
         if (!foundPosition) {
-          const margin = particleSize / 2;
           originX = margin + Math.random() * (spreadWidth - margin * 2);
           originY = margin + Math.random() * (spreadHeight - margin * 2);
           originX = Math.max(margin, Math.min(spreadWidth - margin, originX));
