@@ -151,6 +151,16 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
     img.crossOrigin = 'anonymous';
 
     img.onload = () => {
+      // 获取容器的实际尺寸
+      const containerWidth = containerRef.current?.offsetWidth || window.innerWidth;
+      const containerHeight = containerRef.current?.offsetHeight || window.innerHeight;
+      
+      // 更新 dimensionsRef
+      dimensionsRef.current = {
+        width: containerWidth,
+        height: containerHeight,
+      };
+
       const imgWidth = img.naturalWidth;
       const imgHeight = img.naturalHeight;
 
@@ -186,12 +196,58 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
       const imageData = ctx.getImageData(0, 0, imgWidth, imgHeight).data;
       const points: Particle[] = [];
 
+      // 计算聚集中心位置（用于展开时的散开中心）
+      // 默认使用容器中心
+      let centerX = containerWidth / 2;
+      let centerY = containerHeight / 2;
 
       if (gatherPosition) {
         if (typeof gatherPosition === 'object') {
-          // gatherPosition.x 和 gatherPosition.y 将在后续逻辑中使用 parseValue 处理
+          centerX = parseValue(gatherPosition.x, 'width');
+          centerY = parseValue(gatherPosition.y, 'height');
         } else {
-          // 预设位置将在后续逻辑中处理
+          // 预设位置的中心点
+          switch (gatherPosition) {
+            case 'center':
+              centerX = window.innerWidth / 2;
+              centerY = window.innerHeight / 2;
+              break;
+            case 'top-left':
+              centerX = 0;
+              centerY = 0;
+              break;
+            case 'top-right':
+              centerX = window.innerWidth;
+              centerY = 0;
+              break;
+            case 'bottom-left':
+              centerX = 0;
+              centerY = window.innerHeight;
+              break;
+            case 'bottom-right':
+              centerX = window.innerWidth;
+              centerY = window.innerHeight;
+              break;
+            case 'left-center':
+              centerX = window.innerHeight / 2;
+              centerY = window.innerHeight / 2;
+              break;
+            case 'right-center':
+              centerX = window.innerWidth - window.innerHeight / 2;
+              centerY = window.innerHeight / 2;
+              break;
+            case 'top-center':
+              centerX = window.innerWidth / 2;
+              centerY = 0;
+              break;
+            case 'bottom-center':
+              centerX = window.innerWidth / 2;
+              centerY = window.innerHeight;
+              break;
+            default:
+              centerX = window.innerWidth / 2;
+              centerY = window.innerHeight / 2;
+          }
         }
       }
 
@@ -218,10 +274,10 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
 
       const maxAttempts = 50; // 减少尝试次数，如果找不到不重叠的位置就接受轻微重叠
 
-      // 在整个屏幕范围内均匀随机分布，确保粒子分布到所有象限
-      // 不依赖聚集中心位置，直接在整个屏幕范围内随机分布
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
+      // 在容器范围内均匀随机分布，确保粒子分布到所有象限
+      // 使用容器尺寸而不是整个屏幕尺寸
+      const spreadWidth = containerWidth;
+      const spreadHeight = containerHeight;
 
       // 调试信息：记录中心位置
       // if (process.env.NODE_ENV === 'development') {
@@ -256,27 +312,27 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
 
       // 为每个粒子生成随机位置
       for (const { x, y } of particlePoints) {
-        // 在整个屏幕范围内随机分布
+        // 在容器范围内随机分布
         // 先为粒子生成随机大小（用于重叠检测）
         const particleSize = Math.random() * (maxSize - minSize) + minSize;
-        let originX: number = 0;
-        let originY: number = 0;
+        let originX: number;
+        let originY: number;
         let attempts = 0;
 
         // 尝试生成不重叠的位置
         let foundPosition = false;
         for (attempts = 0; attempts < maxAttempts; attempts++) {
-          // 在整个屏幕范围内完全随机分布
+          // 在容器范围内完全随机分布
           // 确保粒子能分布到所有象限（左上、右上、左下、右下）
           // 使用均匀随机分布，确保每个区域都有粒子
-          // 直接生成在屏幕范围内的随机坐标
+          // 直接生成在容器范围内的随机坐标
           const margin = particleSize / 2;
-          originX = margin + Math.random() * (screenWidth - margin * 2);
-          originY = margin + Math.random() * (screenHeight - margin * 2);
+          originX = margin + Math.random() * (spreadWidth - margin * 2);
+          originY = margin + Math.random() * (spreadHeight - margin * 2);
 
           // 确保坐标在有效范围内（双重检查）
-          originX = Math.max(margin, Math.min(screenWidth - margin, originX));
-          originY = Math.max(margin, Math.min(screenHeight - margin, originY));
+          originX = Math.max(margin, Math.min(spreadWidth - margin, originX));
+          originY = Math.max(margin, Math.min(spreadHeight - margin, originY));
 
           // 检查是否重叠
           if (!checkOverlap(originX, originY, particleSize, points)) {
@@ -288,10 +344,10 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         // 如果找不到不重叠的位置，使用最后一次尝试的位置（允许轻微重叠）
         if (!foundPosition) {
           const margin = particleSize / 2;
-          originX = margin + Math.random() * (screenWidth - margin * 2);
-          originY = margin + Math.random() * (screenHeight - margin * 2);
-          originX = Math.max(margin, Math.min(screenWidth - margin, originX));
-          originY = Math.max(margin, Math.min(screenHeight - margin, originY));
+          originX = margin + Math.random() * (spreadWidth - margin * 2);
+          originY = margin + Math.random() * (spreadHeight - margin * 2);
+          originX = Math.max(margin, Math.min(spreadWidth - margin, originX));
+          originY = Math.max(margin, Math.min(spreadHeight - margin, originY));
         }
 
         // 如果尝试次数过多，仍然添加点（避免无限循环）
@@ -433,6 +489,12 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
             positionAdjustmentX = leftCenterX - imageSizeRef.current.width / 2;
             positionAdjustmentY =
               screenCenterY - imageSizeRef.current.height / 2;
+          } else {
+            // 默认情况：没有设置 gatherPosition 和 className 时，图片从容器左上角开始
+            // positionAdjustmentX 和 positionAdjustmentY 保持为 0
+            // 这样 p.x=0, p.y=0 的粒子会显示在容器的 (0, 0) 位置
+            positionAdjustmentX = 0;
+            positionAdjustmentY = 0;
           }
         }
 
