@@ -1,2 +1,2 @@
-export { default as LogoParticleGather, LogoParticleGatherProps } from './LogoParticleGather';
-export type { GatherPosition } from './LogoParticleGather';
+export { default as LogoParticleGather } from './LogoParticleGather';
+export type { LogoParticleGatherProps, GatherPosition } from './LogoParticleGather';
