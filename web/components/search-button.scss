@@ -1,0 +1,79 @@
+.search-button, .search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px; /* 胶囊形状 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  height: 36px;
+}
+
+.search-button:hover, .search-trigger:hover {
+  background: var(--color-background-hover);
+  border-color: var(--color-border-hover);
+  color: var(--color-text);
+}
+
+.search-text {
+  margin-right: 40px; /* 添加 40px 的右边距 */
+}
+
+.search-shortcut {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  padding: 0 4px;
+  font-size: 12px;
+  font-family: inherit;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+}
+
+.square-key {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.mac-command-key {
+  padding: 0;
+}
+
+.mac-command-key svg {
+  width: 12px;
+  height: 12px;
+}
+
+[data-prefers-color="dark"] kbd {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-secondary);
+}
+
+/* 移动端样式 */
+@media (max-width: 768px) {
+  .search-text {
+    display: none;
+  }
+  
+  .search-shortcut {
+    display: none;
+  }
+}

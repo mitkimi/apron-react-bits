@@ -1,0 +1,196 @@
+.documents-page {
+  min-height: 100vh;
+  background-color: #ffffff;
+
+  [data-prefers-color="dark"] & {
+    background-color: #000000;
+  }
+}
+
+.documents-content {
+  display: flex;
+  padding-top: 60px; // Header height
+  min-height: calc(100vh - 60px);
+}
+
+.documents-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background-color: #f9f9f9;
+  border-right: 1px solid #e5e5e5;
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+
+  // 自定义滚动条
+  &::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    transition: background 0.2s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  [data-prefers-color="dark"] & {
+    background-color: #0a0a0a;
+    border-right-color: #262626;
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.documents-nav {
+  padding: 40px 0; // 减少右侧内边距
+}
+
+.nav-section {
+  margin-bottom: 32px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.nav-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #999999;
+  margin: 0 0 12px 0;
+  padding: 0 20px; // 统一内边距
+
+  [data-prefers-color="dark"] & {
+    color: #666666;
+  }
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin-bottom: 4px;
+
+  a {
+    display: block;
+    padding: 8px 20px; // 统一内边距，取消胶囊形状
+    color: #666666;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 0; // 取消圆角
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      background-color: #f0f0f0;
+      color: #000000;
+
+      [data-prefers-color="dark"] & {
+        background-color: #1a1a1a;
+        color: #ffffff;
+      }
+    }
+
+    [data-prefers-color="dark"] & {
+      color: #999999;
+    }
+  }
+
+  &.active a {
+    background-color: transparent; // 取消背景色
+    color: #000000;
+    font-weight: 500;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 16px;
+      background-color: #000000;
+      border-radius: 0; // 取消圆角
+
+      [data-prefers-color="dark"] & {
+        background-color: #ffffff;
+      }
+    }
+
+    [data-prefers-color="dark"] & {
+      background-color: transparent;
+      color: #ffffff;
+    }
+  }
+}
+
+.documents-main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 20px;
+}
+
+.documents-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 60px 0 100px;
+  margin: 0 auto;
+  padding-right: 20px; // 始终有 20px 右边距
+
+  // 当宽度不足板心宽度时，给板心左右两边加上 20px 的外边距
+  @media (max-width: 1200px) {
+    margin: 0 20px;
+    padding-right: 20px; // 确保在媒体查询中也保持右边距
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+
+    [data-prefers-color="dark"] & {
+      color: #ffffff;
+    }
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #666666;
+    margin: 0 0 48px 0;
+    line-height: 1.6;
+
+    [data-prefers-color="dark"] & {
+      color: #999999;
+    }
+  }
+}

@@ -1,0 +1,217 @@
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 60px;
+  padding: 0 20px;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  transition: border-bottom-color 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
+
+  // 当有背景时的样式
+  &--backgrounded {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+
+    [data-prefers-color="dark"] & {
+      border-bottom-color: rgba(255, 255, 255, 0.18);
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.page-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: 100%;
+}
+
+// 添加新的左侧容器样式
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.page-header-logo-img {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  width: 140px;
+  position: relative;
+  text-decoration: none;
+
+  // Logo 主题切换 - 使用 CSS 控制
+  .logo-light {
+    opacity: 1;
+  }
+  
+  .logo-dark {
+    opacity: 0;
+  }
+
+  [data-prefers-color="dark"] & {
+    .logo-light {
+      opacity: 0;
+    }
+    
+    .logo-dark {
+      opacity: 1;
+    }
+  }
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.page-header-logo-text {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  text-decoration: none;
+  
+  .logo-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    white-space: nowrap;
+    
+    [data-prefers-color="dark"] & {
+      color: #FFFFFF;
+    }
+  }
+}
+
+// 更新左侧容器以正确排列logo和文字
+.page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; // 在logo图片和文字之间添加间距
+}
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-header-nav-link {
+  text-decoration: none;
+  color: #666666;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0 20px;
+  border-radius: 20px;
+  height: 40px;
+  line-height: 40px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: #000000;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  &.active {
+    color: #FFFFFF;
+    background: #393939;
+    font-weight: 500;
+  }
+  
+  [data-prefers-color="dark"] & {
+    color: #999999;
+    
+    &:hover {
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    &.active {
+      color: #393939;
+      background-color: #FFFFFF;
+    }
+  }
+}
+
+.page-header-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  color: inherit;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.page-header-theme-toggle {
+  position: relative;
+  
+  &:focus {
+    outline: none;
+  }
+
+  // 主题图标切换 - 使用 CSS 控制
+  .theme-icon-light {
+    display: block;
+  }
+  
+  .theme-icon-dark {
+    display: none;
+  }
+
+  [data-prefers-color="dark"] & {
+    .theme-icon-light {
+      display: none;
+    }
+    
+    .theme-icon-dark {
+      display: block;
+    }
+  }
+}
+
+.page-header-icon {
+  width: 24px;
+  height: 24px;
+  transition: filter 0.2s ease;
+
+  [data-prefers-color="dark"] & {
+    filter: brightness(0) invert(1);
+  }
+}
+
+// 添加搜索按钮的响应式样式
+@media (max-width: 768px) {
+  .page-header-left {
+    gap: 12px;
+  }
+  
+  .page-header-logo {
+    width: 120px;
+  }
+  
+  .page-header-actions {
+    gap: 12px;
+  }
+  
+  .page-header-nav-link {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+}

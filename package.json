@@ -1,0 +1,27 @@
+{
+  "name": "apron-react-bits",
+  "private": true,
+  "workspaces": [
+    "packages/cli",
+    "packages/logo-particle-gather",
+    "web"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=@apron-design/react-app",
+    "build:logo-particle-gather": "npm run build --workspace=@apron-design/react-logo-particle-gather",
+    "build:web": "npm run build --workspace=@apron-design/react-app",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^8.54.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.3.0",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18"
+  }
+}

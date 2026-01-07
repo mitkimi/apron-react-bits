@@ -1,0 +1,1 @@
+export { LogoParticleGather } from './LogoParticleGather';
