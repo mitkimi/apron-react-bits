@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { SearchButton } from './SearchButton';
+// import { SearchButton } from './SearchButton';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import './PageHeader.scss';
 
@@ -122,7 +122,7 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
           </a>
           
           {/* 将搜索按钮放在 logo 右边 */}
-          <SearchButton />
+          {/* <SearchButton /> */}
         </div>
         
         <div className="page-header-actions">

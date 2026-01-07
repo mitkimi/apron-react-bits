@@ -1,20 +1,64 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { PageHeader } from '@/components/PageHeader';
 import { PageFooter } from '@/components/PageFooter';
+import LogoParticleGather from '../../packages/logo-particle-gather/src/LogoParticleGather';
+import './home.scss';
 
 export default function Home() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    // Check initial theme
+    const checkTheme = () => {
+      const theme = document.documentElement.getAttribute("data-prefers-color");
+      setIsDark(theme === "dark");
+    };
+
+    checkTheme();
+
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "attributes" && mutation.attributeName === "data-prefers-color") {
+          checkTheme();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-prefers-color"]
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <PageHeader backgrounded={80} />
-      <main style={{ minHeight: 'calc(100vh - 200px)' }}>
+      <main className="home-main">
         {/* Hero Section */}
-        <section style={{ padding: '5rem 0' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', textAlign: 'center' }}>
-            <h1 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
-              Apron React Bits
-            </h1>
-            <p style={{ fontSize: '1.5rem', color: '#666', marginBottom: '2rem', maxWidth: '60rem', margin: '0 auto 2rem' }}>
-              一个开源的React组件库
-            </p>
+        <section className="home-hero">
+          {/* Logo Particle Gather Background */}
+          <div className="home-hero-background">
+            <div style={{ width: '100%', height: '100%' }}>
+              <LogoParticleGather
+                src="/assets/images/apron-design.png"
+                gap={30}
+                minSize={8}
+                maxSize={20}
+                color={isDark ? "#ffffff" : "#000000"}
+                duration={800}
+                gatherPosition="center"
+                scale={.4}
+              />
+            </div>
+          </div>
+          
+          {/* Content */}
+          <div className="home-hero-content">
           </div>
         </section>
       </main>
