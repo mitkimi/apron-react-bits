@@ -12,8 +12,27 @@
     top: 0;
     border-radius: 50%;
     will-change: transform;
-    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
-    transition-delay: 0ms;
+  }
+  
+&.uninitialized {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  &.initialized {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .logo-hotspot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: auto;
+    background: transparent;
+    border: none;
+    outline: none;
   }
 
   // Particles will have random delays set via React/JS

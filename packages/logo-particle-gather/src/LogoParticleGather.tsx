@@ -26,6 +26,8 @@ export type GatherPosition =
   | 'top-center' // 顶部横向居中
   | 'bottom-center'; // 底部横向居中
 
+export type GatherState = boolean | 'auto';
+
 export interface LogoParticleGatherProps {
   src: string;
   gap?: number; // 粒子采样密度
@@ -38,6 +40,8 @@ export interface LogoParticleGatherProps {
   onParticleLoad?: (count: number) => void; // 粒子加载完成回调
   gatherPosition?: GatherPosition; // 聚集位置，优先级高于 className
   scale?: number; // 图片缩放比例，默认 0.3（30% 视口高度）
+  delayInit?: number; // 初始化延迟时间，单位毫秒，默认为0
+  gather?: GatherState; // 聚集状态：'auto'为自动，boolean为固定状态
 }
 
 // 将字符串值转换为像素值
@@ -86,9 +90,97 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
   onParticleLoad,
   gatherPosition,
   scale = 0.3, // 默认缩放为视口高度的 30%
+  delayInit = 0, // 默认无延迟
+  gather = 'auto', // 默认为自动模式
 }) => {
   const [particles, setParticles] = useState<Particle[]>([]);
-  const [active, setActive] = useState(false);
+  const [active, setActiveInternal] = useState<boolean>(gather === 'auto' ? false : !gather); // 默认为聚集状态（active=false），除非gather设置为false
+  const [leaveTimeoutId, setLeaveTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const autoSwitchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // 无论delayInit值如何，都设置定时器来更新初始化状态
+  // 如果delayInit为0，也会立即触发状态更新
+  // 使用独立的effect处理初始化逻辑，避免processImage的循环依赖
+  useEffect(() => {
+    if (delayInit > 0) {
+      // 如果有延迟初始化，则延迟执行
+      const timer = setTimeout(() => {
+        setIsInitialized(true);
+      }, delayInit);
+      return () => clearTimeout(timer);
+    } else {
+      setIsInitialized(true);
+    }
+  }, [delayInit]); // 只依赖delayInit
+
+  // 当isInitialized变为true且图像源变化时，处理图像
+  useEffect(() => {
+    if (isInitialized) {
+      processImage();
+    }
+  }, [isInitialized, src, gap, alphaThreshold, scale, gatherPosition]); // 依赖isInitialized和其他影响图像处理的参数
+  
+  // 根据gather属性控制最终的active状态
+  const effectiveActive = React.useMemo(() => {
+    if (typeof gather === 'boolean') {
+      // 当gather为boolean时，直接使用该值（false=聚集，true=散开）
+      // 注意：这里的逻辑是反向的，因为active=true时粒子散开，active=false时粒子聚集
+      return !gather; // gather=true(聚集)时，active=false；gather=false(散开)时，active=true
+    }
+    // 当gather为'auto'时，使用内部状态
+    return active;
+  }, [gather, active]);
+  
+  // 当gather属性改变时，更新内部active状态（仅在auto模式下）
+  React.useEffect(() => {
+    if (gather === 'auto') {
+      // 在auto模式下，允许通过setActiveInternal来控制状态
+      // 设置初始状态为聚集（active=false）
+      setActiveInternal(false);
+    } else if (typeof gather === 'boolean') {
+      // 当从auto模式切换到boolean模式时，更新内部状态
+      setActiveInternal(!gather);
+    }
+  }, [gather]);
+  
+  // auto模式下每8秒自动切换gather状态
+  useEffect(() => {
+    if (gather === 'auto') {
+      // 初始状态为聚集，然后开始自动切换
+      setActiveInternal(false);
+      
+      const startAutoSwitch = () => {
+        const switchGatherState = () => {
+          setActiveInternal(prev => !prev); // 切换聚集/散开状态
+        };
+        
+        // 每8秒切换一次状态
+        return setInterval(switchGatherState, 8000);
+      };
+      
+      let intervalId: NodeJS.Timeout | null = startAutoSwitch();
+      
+      // 清理函数
+      return () => {
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+        if (autoSwitchTimeoutRef.current) {
+          clearTimeout(autoSwitchTimeoutRef.current);
+          autoSwitchTimeoutRef.current = null;
+        }
+      };
+    }
+    
+    // 如果不是auto模式，则不需要自动切换
+    return () => {
+      if (autoSwitchTimeoutRef.current) {
+        clearTimeout(autoSwitchTimeoutRef.current);
+        autoSwitchTimeoutRef.current = null;
+      }
+    };
+  }, [gather]);
   const containerRef = useRef<HTMLDivElement>(null);
   const dimensionsRef = useRef<ContainerDimensions>({ width: 0, height: 0 });
   const imageSizeRef = useRef<{ width: number; height: number }>({
@@ -316,6 +408,7 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         });
       }
 
+      // 设置粒子数据
       setParticles(points);
 
       // 调用粒子加载完成回调
@@ -323,19 +416,69 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         onParticleLoad(points.length);
       }
     };
-  }, [src, gap, alphaThreshold, onParticleLoad, scale, gatherPosition]);
+  }, [src, gap, alphaThreshold, onParticleLoad, scale, gatherPosition, delayInit]);
 
   useEffect(() => {
     processImage();
   }, [processImage]);
 
+  // 组件卸载时清理定时器
+  useEffect(() => {
+    return () => {
+      if (leaveTimeoutId) {
+        clearTimeout(leaveTimeoutId);
+      }
+    };
+  }, [leaveTimeoutId]);
+
   return (
     <div
       ref={containerRef}
-      className={`logo-particle-gather-container ${className}`}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
+      className={`logo-particle-gather-container ${className} ${isInitialized ? 'initialized' : 'uninitialized'}`}
     >
+      {/* 热区：只在logo聚集位置响应鼠标事件 */}
+      {scaleRef.current.displayWidth > 0 && scaleRef.current.displayHeight > 0 && (
+        <div
+          className="logo-hotspot"
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: `${scaleRef.current.displayWidth}px`,
+            height: `${scaleRef.current.displayHeight}px`,
+            transform: `translate(${(dimensionsRef.current.width - scaleRef.current.displayWidth) / 2}px, ${(dimensionsRef.current.height - scaleRef.current.displayHeight) / 2}px)`,
+            cursor: 'pointer',
+            zIndex: 10,
+            pointerEvents: 'auto',
+          }}
+          onMouseEnter={() => {
+            // 只在auto模式下响应鼠标事件
+            if (gather === 'auto') {
+              // 清除可能存在的离开延迟定时器
+              if (leaveTimeoutId) {
+                clearTimeout(leaveTimeoutId);
+                setLeaveTimeoutId(null);
+              }
+              // 清除自动切换的定时器，防止冲突
+              if (autoSwitchTimeoutRef.current) {
+                clearTimeout(autoSwitchTimeoutRef.current);
+                autoSwitchTimeoutRef.current = null;
+              }
+              setActiveInternal(false); // 鼠标进入热区时聚集
+            }
+          }}
+          onMouseLeave={() => {
+            // 只在auto模式下响应鼠标事件
+            if (gather === 'auto') {
+              // 设置500ms延迟再散开
+              const timeoutId = setTimeout(() => {
+                setActiveInternal(true); // 鼠标离开热区后散开
+              }, 500);
+              setLeaveTimeoutId(timeoutId);
+            }
+          }}
+        />
+      )}
       {particles.map((p, i) => {
         // Calculate random delay for each particle
         const randomDelay = Math.random() * (duration * 0.3); // 0-30% of duration in ms
@@ -344,7 +487,10 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         const particleSize = p.size;
 
         // Generate random opacity between 5% and 30%
-        const opacity = Math.random() * (0.3 - 0.05) + 0.05;
+        const randomOpacity = Math.random() * (0.3 - 0.05) + 0.05;
+
+        // 现在在容器级别处理透明度，所以粒子的opacity就是其随机opacity值
+        const opacity = randomOpacity;
 
         // Calculate position adjustments based on gatherPosition or className
         let positionAdjustmentX = 0;
@@ -444,27 +590,26 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         }
 
         // Calculate final positions
-        // 如果聚集状态，需要将图片的像素坐标按缩放比例转换为屏幕坐标，然后加上偏移量
-        // 如果非聚集状态，使用原始随机位置（已确保不重叠）
-        // 聚集时的位置基于图片像素坐标，如果 gap 足够大，聚集时也不会重叠
-        const finalX = active
-          ? p.x * scaleRef.current.scaleX + positionAdjustmentX
-          : p.originX;
-        const finalY = active
-          ? p.y * scaleRef.current.scaleY + positionAdjustmentY
-          : p.originY;
+        // 如果 active 为 true，粒子散开到随机位置 (p.originX, p.originY)
+        // 如果 active 为 false，粒子聚集到 logo 位置 (p.x * scale + adjustment)
+        const finalX = effectiveActive
+          ? p.originX  // 散开状态：使用随机位置
+          : p.x * scaleRef.current.scaleX + positionAdjustmentX; // 聚集状态：使用 logo 位置
+        const finalY = effectiveActive
+          ? p.originY  // 散开状态：使用随机位置
+          : p.y * scaleRef.current.scaleY + positionAdjustmentY; // 聚集状态：使用 logo 位置
 
         return (
           <span
             key={i}
-            className={`logo-particle ${active ? 'gathered' : ''}`}
+            className={`logo-particle ${effectiveActive ? 'scattered' : 'gathered'}`}
             style={{
               width: particleSize,
               height: particleSize,
               backgroundColor: color,
               opacity: opacity,
               transform: `translate(${finalX}px, ${finalY}px)`,
-              transitionDuration: `${duration}ms`,
+              transition: `opacity ${duration}ms ease-in-out, transform ${duration}ms ease-in-out`,
               transitionDelay: `${randomDelay}ms`,
             }}
           />
