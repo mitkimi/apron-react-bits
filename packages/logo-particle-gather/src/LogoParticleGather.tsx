@@ -38,6 +38,7 @@ export interface LogoParticleGatherProps {
   onParticleLoad?: (count: number) => void; // 粒子加载完成回调
   gatherPosition?: GatherPosition; // 聚集位置，优先级高于 className
   scale?: number; // 图片缩放比例，默认 0.3（30% 视口高度）
+  delayInit?: number; // 初始化延迟时间，单位毫秒，默认为0
 }
 
 // 将字符串值转换为像素值
@@ -86,9 +87,11 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
   onParticleLoad,
   gatherPosition,
   scale = 0.3, // 默认缩放为视口高度的 30%
+  delayInit = 0, // 默认无延迟
 }) => {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [active, setActive] = useState(false);
+  const [leaveTimeoutId, setLeaveTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const dimensionsRef = useRef<ContainerDimensions>({ width: 0, height: 0 });
   const imageSizeRef = useRef<{ width: number; height: number }>({
@@ -316,6 +319,7 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         });
       }
 
+      // 设置粒子数据
       setParticles(points);
 
       // 调用粒子加载完成回调
@@ -323,19 +327,66 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         onParticleLoad(points.length);
       }
     };
-  }, [src, gap, alphaThreshold, onParticleLoad, scale, gatherPosition]);
+  }, [src, gap, alphaThreshold, onParticleLoad, scale, gatherPosition, delayInit]);
 
   useEffect(() => {
-    processImage();
-  }, [processImage]);
+    // 如果有延迟初始化，则延迟执行
+    if (delayInit > 0) {
+      const timer = setTimeout(() => {
+        processImage();
+      }, delayInit);
+      return () => clearTimeout(timer);
+    } else {
+      processImage();
+    }
+  }, [processImage, delayInit]);
+
+  // 组件卸载时清理定时器
+  useEffect(() => {
+    return () => {
+      if (leaveTimeoutId) {
+        clearTimeout(leaveTimeoutId);
+      }
+    };
+  }, [leaveTimeoutId]);
 
   return (
     <div
       ref={containerRef}
       className={`logo-particle-gather-container ${className}`}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
     >
+      {/* 热区：只在logo聚集位置响应鼠标事件 */}
+      {scaleRef.current.displayWidth > 0 && scaleRef.current.displayHeight > 0 && (
+        <div
+          className="logo-hotspot"
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: `${scaleRef.current.displayWidth}px`,
+            height: `${scaleRef.current.displayHeight}px`,
+            transform: `translate(${(dimensionsRef.current.width - scaleRef.current.displayWidth) / 2}px, ${(dimensionsRef.current.height - scaleRef.current.displayHeight) / 2}px)`,
+            cursor: 'pointer',
+            zIndex: 10,
+            pointerEvents: 'auto',
+          }}
+          onMouseEnter={() => {
+             // 清除可能存在的离开延迟定时器
+             if (leaveTimeoutId) {
+               clearTimeout(leaveTimeoutId);
+               setLeaveTimeoutId(null);
+             }
+             setActive(false); // 鼠标进入热区时聚集
+           }}
+          onMouseLeave={() => {
+            // 设置500ms延迟再散开
+            const timeoutId = setTimeout(() => {
+              setActive(true); // 鼠标离开热区后散开
+            }, 500);
+            setLeaveTimeoutId(timeoutId);
+          }}
+        />
+      )}
       {particles.map((p, i) => {
         // Calculate random delay for each particle
         const randomDelay = Math.random() * (duration * 0.3); // 0-30% of duration in ms
@@ -444,20 +495,19 @@ const LogoParticleGather: React.FC<LogoParticleGatherProps> = ({
         }
 
         // Calculate final positions
-        // 如果聚集状态，需要将图片的像素坐标按缩放比例转换为屏幕坐标，然后加上偏移量
-        // 如果非聚集状态，使用原始随机位置（已确保不重叠）
-        // 聚集时的位置基于图片像素坐标，如果 gap 足够大，聚集时也不会重叠
+        // 如果 active 为 true，粒子散开到随机位置 (p.originX, p.originY)
+        // 如果 active 为 false，粒子聚集到 logo 位置 (p.x * scale + adjustment)
         const finalX = active
-          ? p.x * scaleRef.current.scaleX + positionAdjustmentX
-          : p.originX;
+          ? p.originX  // 散开状态：使用随机位置
+          : p.x * scaleRef.current.scaleX + positionAdjustmentX; // 聚集状态：使用 logo 位置
         const finalY = active
-          ? p.y * scaleRef.current.scaleY + positionAdjustmentY
-          : p.originY;
+          ? p.originY  // 散开状态：使用随机位置
+          : p.y * scaleRef.current.scaleY + positionAdjustmentY; // 聚集状态：使用 logo 位置
 
         return (
           <span
             key={i}
-            className={`logo-particle ${active ? 'gathered' : ''}`}
+            className={`logo-particle ${active ? 'scattered' : 'gathered'}`}
             style={{
               width: particleSize,
               height: particleSize,

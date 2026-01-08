@@ -47,8 +47,8 @@ export default function Home() {
               <LogoParticleGather
                 src="/assets/images/apron-design.png"
                 gap={30}
-                minSize={8}
-                maxSize={20}
+                minSize={6}
+                maxSize={30}
                 color={isDark ? "#ffffff" : "#000000"}
                 duration={800}
                 gatherPosition="center"

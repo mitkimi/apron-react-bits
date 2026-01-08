@@ -16,6 +16,16 @@
     transition-delay: 0ms;
   }
 
+  .logo-hotspot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: auto;
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+
   // Particles will have random delays set via React/JS
 }
 
