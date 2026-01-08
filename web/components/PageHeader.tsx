@@ -144,10 +144,10 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
             aria-label="GitHub"
           >
             <img
-              src="/assets/icons/github.svg"
-              alt="GitHub"
-              className="page-header-icon"
-            />
+                src="/assets/icons/github.svg"
+                alt="GitHub"
+                className="page-header-icon"
+              />
           </a>
           
           <ThemeSwitcher />

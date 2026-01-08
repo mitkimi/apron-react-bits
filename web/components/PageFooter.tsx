@@ -43,12 +43,12 @@ export function PageFooter() {
             <div className="footer-info">
               <div className="footer-logo">
                 <Image
-                  src={isDark ? "/assets/images/logo-dark.svg" : "/assets/images/logo-light.svg"}
-                  alt="Logo"
-                  width={238}
-                  height={50}
-                  priority
-                />
+                    src={isDark ? "/assets/images/logo-dark.svg" : "/assets/images/logo-light.svg"}
+                    alt="Logo"
+                    width={238}
+                    height={50}
+                    priority
+                  />
               </div>
               <div className="version">
                 Apron React Bits
