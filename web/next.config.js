@@ -1,3 +1,5 @@
+const withMDX = require('@next/mdx')();
+
 /** @type {import('next').NextConfig} */ 
 const nextConfig = { 
   // 使用现有的 GITHUB_PAGES_BASE_PATH 环境变量，保持与 GitHub Actions 配置的一致性
@@ -14,6 +16,8 @@ const nextConfig = {
   images: {
     unoptimized: true, // GitHub Pages 需要未优化的图片
   },
+  
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
 }; 
 
-module.exports = nextConfig;
+module.exports = withMDX(nextConfig);

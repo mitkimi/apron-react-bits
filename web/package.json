@@ -11,10 +11,14 @@
   "dependencies": {
     "@apron-design/react": "^26.0.3",
     "@apron-design/react-logo-particle-gather": "^1.0.0",
+    "@next/mdx": "^16.1.1",
     "gsap": "^3.14.2",
     "next": "^14.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
