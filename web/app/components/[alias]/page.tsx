@@ -7,7 +7,7 @@ export function generateStaticParams() {
   return [
     { alias: 'getting-started' },
     { alias: 'button' },
-    { alias: 'logo-partical-gather' },
+    { alias: 'logo-particle-gather' },
   ];
 }
 
@@ -21,13 +21,13 @@ const navigation = [
   {
     title: '通用',
     items: [
-      { label: '暂无', href: '/components/button' },
+      { label: '暂无', href: '#' },
     ],
   },
   {
     title: '背景',
     items: [
-      { label: 'Logo 粒子聚集散开', href: '/components/logo-partical-gather' },
+      { label: 'Logo 粒子聚集散开', href: '/components/logo-particle-gather' },
     ],
   },
 ];
