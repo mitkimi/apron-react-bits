@@ -3,11 +3,14 @@ import path from 'path';
 
 // Check if we're running a build command vs dev command
 // We'll use a custom environment variable that can be set during CI/CD
-const shouldUseBasePath = process.env.USE_BASE_PATH === 'true';
+const shouldUseBasePath = process.env.GITHUB_PAGES_BASE_PATH === '/apron-react-bits';
 
 const nextConfig: NextConfig = {
   // Conditionally apply basePath based on environment variable
-  basePath: shouldUseBasePath ? '/apron-react-bits' : '',
+  basePath: process.env.GITHUB_PAGES_BASE_PATH || '',
+  
+  // Set asset prefix for GitHub Pages deployment
+  assetPrefix: process.env.GITHUB_PAGES_BASE_PATH || '',
   
   // Ensure trailing slashes are handled correctly
   trailingSlash: true,
@@ -28,7 +31,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['sharp', 'onnxruntime-node'],
   
   env: {
-    BASE_PATH: shouldUseBasePath ? '/apron-react-bits' : '',
+    BASE_PATH: process.env.GITHUB_PAGES_BASE_PATH || '',
   },
   
   // 配置 webpack
