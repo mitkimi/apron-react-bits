@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import Image from "next/image";
 import "./ThemeSwitcher.scss";
 
 type ThemeMode = "light" | "dark" | "system";
@@ -107,25 +108,31 @@ export function ThemeSwitcher() {
   const getActiveIcon = () => {
     if (themeMode === "light") {
       return (
-        <img
+        <Image
           src="/assets/icons/sun.svg"
           alt="浅色模式"
+          width={24}
+          height={24}
           className="theme-icon"
         />
       );
     } else if (themeMode === "dark") {
       return (
-        <img
+        <Image
           src="/assets/icons/moon.svg"
           alt="深色模式"
+          width={24}
+          height={24}
           className="theme-icon"
         />
       );
     } else {
       return (
-        <img
+        <Image
           src="/assets/icons/with-system.svg"
           alt="跟随系统"
+          width={24}
+          height={24}
           className="theme-icon theme-icon-system"
         />
       );
@@ -170,9 +177,11 @@ export function ThemeSwitcher() {
               className={`theme-dropdown-item ${themeMode === option.value ? 'active' : ''}`}
               onClick={() => handleThemeChange(option.value as ThemeMode)}
             >
-              <img
+              <Image
                 src={option.icon}
                 alt={option.label}
+                width={16}
+                height={16}
                 className={`theme-dropdown-icon ${option.value === 'system' ? 'theme-icon-system' : ''}`}
               />
               <span>{option.label}</span>

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PageHeader } from '@/components/PageHeader';
 import { PageFooter } from '@/components/PageFooter';
-import LogoParticleGather from '../../packages/logo-particle-gather/src/LogoParticleGather';
+import { LogoParticleGather } from '../../packages/logo-particle-gather/src';
 import './home.scss';
 import { gsap } from 'gsap';
 
@@ -73,26 +73,6 @@ export default function Home() {
         }
       );
     }
-  }, []);
-
-  // 页面卸载时的离开动画
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (logoContainerRef.current) {
-        gsap.to(logoContainerRef.current, {
-          scale: 0.5,
-          opacity: 0,
-          duration: 1,          // 1秒内完成离开动画
-          ease: "power2.in"     // 向内加速效果
-        });
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
   }, []);
 
   return (

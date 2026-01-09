@@ -7,9 +7,9 @@
     "web"
   ],
   "scripts": {
-    "dev:web": "npm run dev --workspace=@apron-design/react-app",
+    "dev:web": "npm run dev --workspace=web",
     "build:logo-particle-gather": "npm run build --workspace=@apron-design/react-logo-particle-gather",
-    "build:web": "npm run build --workspace=@apron-design/react-app",
+    "build:web": "npm run build --workspace=web",
     "lint": "npm run lint --workspaces --if-present"
   },
   "devDependencies": {
