@@ -17,12 +17,13 @@ const nextConfig: NextConfig = {
   // Ensure trailing slashes are handled correctly
   trailingSlash: true,
   
-  // Enable turbopack with empty config to resolve the Turbopack/webpack conflict
-  turbopack: {},
-  
-  experimental: {
-    serverComponentsExternalPackages: ['sharp', 'onnxruntime-node'],
+  // Configure turbopack root directory to fix build issue
+  turbopack: {
+    root: path.resolve(process.cwd(), '..'),
   },
+  
+  // Move serverComponentsExternalPackages from experimental to top-level
+  serverExternalPackages: ['sharp', 'onnxruntime-node'],
   
   // 配置 webpack（用于非 Turbopack 构建）
   webpack: (config, { dir }) => {
