@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PageHeader } from '@/components/PageHeader';
 import { PageFooter } from '@/components/PageFooter';
+import { useEffect, useRef } from 'react';
 import './Documents.scss';
 
 interface NavItem {
@@ -17,69 +16,78 @@ interface NavSection {
   items: NavItem[];
 }
 
-interface DocumentsLayoutProps {
+interface DocumentsProps {
+  navigation: NavSection[];
   children: React.ReactNode;
-  navigation?: NavSection[];
 }
 
-export default function DocumentsLayout({ children, navigation }: DocumentsLayoutProps) {
+export function Documents({ navigation, children }: DocumentsProps) {
   const pathname = usePathname();
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // 默认导航结构
-  const defaultNavigation: NavSection[] = [
-    {
-      title: '开始',
-      items: [
-        { label: '快速上手', href: '/docs/getting-started' },
-        { label: '安装', href: '/docs/installation' },
-        { label: '主题', href: '/docs/theme' },
-      ],
-    },
-    {
-      title: '组件',
-      items: [
-        { label: 'Logo Particle Gather', href: '/docs/components/logo-particle-gather' },
-        { label: 'Page Header', href: '/docs/components/page-header' },
-        { label: 'Page Footer', href: '/docs/components/page-footer' },
-        { label: 'Theme Switcher', href: '/docs/components/theme-switcher' },
-        { label: 'Search Button', href: '/docs/components/search-button' },
-      ],
-    },
-  ];
+  // 保存和恢复侧边栏滚动位置
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar) return;
 
-  const navStructure = navigation || defaultNavigation;
+    // 从 sessionStorage 恢复滚动位置
+    const savedScrollTop = sessionStorage.getItem('sidebar-scroll-top');
+    if (savedScrollTop) {
+      sidebar.scrollTop = parseInt(savedScrollTop, 10);
+    }
+
+    // 保存滚动位置的函数
+    const saveScrollPosition = () => {
+      sessionStorage.setItem('sidebar-scroll-top', sidebar.scrollTop.toString());
+    };
+
+    // 监听滚动事件
+    sidebar.addEventListener('scroll', saveScrollPosition);
+
+    // 组件卸载时清理事件监听器
+    return () => {
+      sidebar.removeEventListener('scroll', saveScrollPosition);
+    };
+  }, []);
 
   return (
     <div className="documents-page">
-      <PageHeader backgrounded={80} />
+      <PageHeader backgrounded />
       
       <div className="documents-content">
-        <aside className="documents-sidebar">
+        <aside className="documents-sidebar" ref={sidebarRef}>
           <nav className="documents-nav">
-            {navStructure.map((section, index) => (
-              <div key={index} className="nav-section">
+            {navigation.map((section, index) => (
+              <div className="nav-section" key={index}>
                 <h3 className="nav-section-title">{section.title}</h3>
                 <ul className="nav-list">
-                  {section.items.map((item, itemIndex) => (
-                    <li key={itemIndex} className={`nav-item ${pathname === item.href ? 'active' : ''}`}>
-                      <Link href={item.href}>{item.label}</Link>
-                    </li>
-                  ))}
+                  {section.items.map((item, itemIndex) => {
+                    // Normalize paths for comparison (remove trailing slash)
+                    const normalizedPathname = pathname.replace(/\/$/, '');
+                    const normalizedHref = item.href.replace(/\/$/, '');
+                    const isActive = normalizedPathname === normalizedHref;
+                    return (
+                      <li 
+                        className={`nav-item ${isActive ? 'active' : ''}`} 
+                        key={itemIndex}
+                      >
+                        <a href={item.href}>{item.label}</a>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
           </nav>
         </aside>
-        
-        <main className="documents-main">
+
+        <main className="documents-main" id="document-container">
           <div className="documents-container">
             {children}
           </div>
+          <PageFooter />
         </main>
       </div>
-      
-      <PageFooter />
     </div>
   );
 }

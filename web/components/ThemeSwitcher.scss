@@ -31,7 +31,7 @@
     filter: none;
     
     [data-prefers-color="dark"] & {
-      filter: invert(1); /* 在深色模式下将图标变为白色 */
+      filter: invert(1); // 在深色模式下将图标变为白色
     }
   }
   
@@ -39,7 +39,7 @@
     filter: none;
     
     [data-prefers-color="dark"] & {
-      filter: invert(1); /* 在深色模式下将系统图标变为白色 */
+      filter: invert(1); // 在深色模式下将系统图标变为白色
     }
   }
 }
@@ -107,7 +107,7 @@
     filter: none;
     
     [data-prefers-color="dark"] & {
-      filter: invert(1); /* 在深色模式下将图标变为白色 */
+      filter: invert(1); // 在深色模式下将图标变为白色
     }
   }
   
@@ -115,7 +115,7 @@
     filter: none;
     
     [data-prefers-color="dark"] & {
-      filter: invert(1); /* 在深色模式下将系统图标变为白色 */
+      filter: invert(1); // 在深色模式下将系统图标变为白色
     }
   }
 }

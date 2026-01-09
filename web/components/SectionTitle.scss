@@ -1,0 +1,55 @@
+.section-title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 100px;
+  
+  // Alignment variants
+  &--left {
+    align-items: flex-start;
+  }
+  
+  &--center {
+    align-items: center;
+  }
+  
+  &--right {
+    align-items: flex-end;
+  }
+  
+  // Main title text (slot content)
+  &__text {
+    font-size: 32px;
+    font-weight: 400;
+    margin: 0;
+    color: #000;
+    
+    [data-prefers-color="dark"] & {
+      color: #fff;
+    }
+  }
+  
+  // Divider
+  &__divider {
+    width: 80px;
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 20px;
+    background-color: #000;
+    
+    [data-prefers-color="dark"] & {
+      background-color: #fff;
+    }
+  }
+  
+  // Tip text
+  &__tip {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 20px 0 0 0;
+    color: #999999;
+    
+    [data-prefers-color="dark"] & {
+      color: #999999;
+    }
+  }
+}

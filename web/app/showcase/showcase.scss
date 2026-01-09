@@ -1,0 +1,195 @@
+// 主题图标切换 - 使用 CSS 控制深色/浅色模式
+.theme-icon-wrapper {
+  display: inline-flex;
+  position: relative;
+
+  .icon-light {
+    display: block;
+  }
+  
+  .icon-dark {
+    display: none;
+  }
+
+  [data-prefers-color="dark"] & {
+    .icon-light {
+      display: none;
+    }
+    
+    .icon-dark {
+      display: block;
+    }
+  }
+}
+
+.showcase-hero-container {
+  height: 460px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 60px;
+}
+
+.showcase-container {
+  background-color: #f5f5f5;
+  [data-prefers-color="dark"] & {
+    background-color: #1a1a1a;
+  }
+  padding: 80px 0 120px;
+}
+
+.showcase-tabs-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+
+  // Tab 内容样式
+  .tab-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tab-icon {
+    border-radius: 4px;
+    object-fit: cover;
+
+    // 当 tab-icon 是 theme-icon-wrapper 时
+    &.theme-icon-wrapper img {
+      border-radius: 4px;
+    }
+  }
+}
+
+// 产品展示面板
+.product-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  padding: 48px 0;
+  align-items: center;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.product-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.product-icon {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  object-fit: cover;
+
+  [data-prefers-color="dark"] & {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  // 当 product-icon 是 theme-icon-wrapper 时的样式
+  &.theme-icon-wrapper {
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    [data-prefers-color="dark"] & {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    img {
+      border-radius: 16px;
+    }
+  }
+}
+
+.product-title-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+
+  [data-prefers-color="dark"] & {
+    color: #f5f5f5;
+  }
+}
+
+.product-description {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #666;
+  margin: 0;
+
+  [data-prefers-color="dark"] & {
+    color: #a0a0a0;
+  }
+}
+
+.product-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+// 产品截图
+.product-screenshot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screenshot-frame {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  [data-prefers-color="dark"] & {
+    background: linear-gradient(135deg, #434343 0%, #1a1a1a 100%);
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  }
+}
+
+.screenshot-image {
+  display: block;
+  border-radius: 12px;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}

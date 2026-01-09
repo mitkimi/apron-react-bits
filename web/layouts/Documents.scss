@@ -194,3 +194,52 @@
     }
   }
 }
+
+.doc-section {
+  margin-bottom: 48px;
+
+  h2 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 16px 0;
+    padding-top: 16px;
+    border-top: 1px solid #e5e5e5;
+
+    [data-prefers-color="dark"] & {
+      color: #ffffff;
+      border-top-color: #262626;
+    }
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333333;
+    margin: 0 0 16px 0;
+
+    [data-prefers-color="dark"] & {
+      color: #cccccc;
+    }
+  }
+
+  ul {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333333;
+    margin: 0;
+    padding-left: 24px;
+
+    [data-prefers-color="dark"] & {
+      color: #cccccc;
+    }
+
+    li {
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

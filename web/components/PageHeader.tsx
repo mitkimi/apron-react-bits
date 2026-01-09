@@ -1,9 +1,14 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from "react";
-// import { SearchButton } from './SearchButton';
-import { ThemeSwitcher } from './ThemeSwitcher';
-import './PageHeader.scss';
+import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from 'next/navigation';
+import { SearchButton } from './SearchButton'; // 添加导入
+import { ThemeSwitcher } from './ThemeSwitcher'; // 添加导入
+import "./PageHeader.scss";
+
+type ThemeMode = "light" | "dark" | "system";
 
 interface PageHeaderProps {
   backgrounded?: number | boolean;
@@ -11,6 +16,43 @@ interface PageHeaderProps {
 
 export function PageHeader({ backgrounded }: PageHeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+
+  // 初始化主题 - 在客户端首次渲染时执行
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedMode = localStorage.getItem("themeMode") as ThemeMode | null;
+      let themeMode: ThemeMode = "system";
+      
+      if (savedMode) {
+        themeMode = savedMode;
+      } else {
+        // 检查旧的 theme 设置
+        const oldTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+        if (oldTheme) {
+          themeMode = oldTheme;
+        } else {
+          themeMode = "system";
+        }
+      }
+      
+      // 获取实际要应用的主题
+      let themeValue: "light" | "dark" = "light";
+      if (themeMode === "system") {
+        themeValue = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      } else {
+        themeValue = themeMode;
+      }
+      
+      document.documentElement.setAttribute("data-prefers-color", themeValue);
+      document.documentElement.setAttribute("apron-theme", themeValue);
+      
+      // 设置背景色
+      const bgColor = themeValue === "dark" ? "#000000" : "#FFFFFF";
+      document.documentElement.style.backgroundColor = bgColor;
+      document.body.style.backgroundColor = bgColor;
+    }
+  }, []);
 
   useEffect(() => {
     // 如果 backgrounded 是数字，监听滚动事件
@@ -26,10 +68,41 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
     }
   }, [backgrounded]);
 
+
+
   // 确定是否显示背景
   const showBackground = 
     backgrounded === true || 
     (typeof backgrounded === "number" && isScrolled);
+
+  // 判断导航项是否应该高亮
+  const isNavActive = (href: string) => {
+    // 根路径特殊处理
+    if (href === '/' && pathname === '/') {
+      return true;
+    }
+    
+    // 对于根路径，不匹配其他路径
+    if (href === '/') {
+      return false;
+    }
+    
+    // 移除尾部斜杠进行比较
+    const normalizedHref = href.replace(/\/$/, '');
+    const normalizedPathname = pathname.replace(/\/$/, '');
+    
+    // 如果是精确匹配
+    if (normalizedHref === normalizedPathname) {
+      return true;
+    }
+    
+    // 如果是前缀匹配（处理二级页面）
+    if (normalizedPathname.startsWith(normalizedHref) && normalizedHref !== '') {
+      return true;
+    }
+    
+    return false;
+  };
 
   // 导航项配置
   const navItems = [
@@ -39,116 +112,58 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
     { href: '//apron.design', label: '回到 Apron Design' }
   ];
 
-  useEffect(() => {
-    // 更新导航项的活动状态
-    const updateActiveNav = () => {
-      if (typeof window === 'undefined') return;
-      
-      const currentPath = window.location.pathname;
-      
-      // 移除所有活动状态
-      const navLinks = document.querySelectorAll('.page-header-nav-link');
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-      });
-      
-      // 添加当前页面的活动状态
-      navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href) {
-          // 根路径特殊处理
-          if (href === '/' && currentPath === '/') {
-            link.classList.add('active');
-            return;
-          }
-          
-          // 对于根路径，不匹配其他路径
-          if (href === '/') {
-            return;
-          }
-          
-          // 移除尾部斜杠进行比较
-          const normalizedHref = href.replace(/\/$/, '');
-          const normalizedPathname = currentPath.replace(/\/$/, '');
-          
-          // 如果是精确匹配
-          if (normalizedHref === normalizedPathname) {
-            link.classList.add('active');
-            return;
-          }
-          
-          // 如果是前缀匹配（处理二级页面）
-          if (normalizedPathname.startsWith(normalizedHref) && normalizedHref !== '') {
-            link.classList.add('active');
-          }
-        }
-      });
-    };
-    
-    // 初始更新
-    updateActiveNav();
-    
-    // 监听 URL 变化（如果使用客户端路由）
-    const handleUrlChange = () => {
-      updateActiveNav();
-    };
-    
-    window.addEventListener('popstate', handleUrlChange);
-    
-    return () => {
-      window.removeEventListener('popstate', handleUrlChange);
-    };
-  }, []);
-
   return (
     <header className={`page-header ${showBackground ? "page-header--backgrounded" : ""}`}>
       <div className="page-header-container">
         <div className="page-header-left">
-          <a href="/" className="page-header-logo-img">
-            {/* 使用 CSS 控制 logo 切换 */}
-            <img
+          <Link href="/" className="page-header-logo">
+            {/* 使用 CSS 控制 logo 切换，避免 hydration 错误 */}
+            <Image
               src="/assets/images/logo-light.svg"
               alt="Logo"
+              fill
+              priority
               className="logo-light"
             />
-            <img
+            <Image
               src="/assets/images/logo-dark.svg"
               alt="Logo"
+              fill
+              priority
               className="logo-dark"
             />
-          </a>
-          <a href="/" className="page-header-logo-text">
-            <span className="logo-text">React Bits</span>
-          </a>
+          </Link>
           
           {/* 将搜索按钮放在 logo 右边 */}
-          {/* <SearchButton /> */}
+          <SearchButton />
         </div>
         
         <div className="page-header-actions">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
-              className="page-header-nav-link"
+              className={`page-header-nav-link ${isNavActive(item.href) ? 'active' : ''}`}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
           
-          <a 
+          <Link 
             href="https://github.com/mitkimi/apron-react-bits"
             target="_blank"
             rel="noopener noreferrer"
             className="page-header-icon-button"
             aria-label="GitHub"
           >
-            <img
-                src="/assets/icons/github.svg"
-                alt="GitHub"
-                className="page-header-icon"
-              />
-          </a>
+            <Image
+              src="/assets/icons/github.svg"
+              alt="GitHub"
+              width={24}
+              height={24}
+              className="page-header-icon"
+            />
+          </Link>
           
           <ThemeSwitcher />
         </div>
