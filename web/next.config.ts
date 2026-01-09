@@ -17,11 +17,19 @@ const nextConfig: NextConfig = {
   // Ensure trailing slashes are handled correctly
   trailingSlash: true,
   
-  // 配置 Turbopack（Next.js 16 默认使用）
+  // Enable turbopack with empty config to resolve the Turbopack/webpack conflict
   turbopack: {},
   
+  experimental: {
+    serverComponentsExternalPackages: ['sharp', 'onnxruntime-node'],
+  },
+  
   // 配置 webpack（用于非 Turbopack 构建）
-  webpack: (config) => {
+  webpack: (config, { dir }) => {
+    config.resolve = {
+      ...config.resolve,
+      symlinks: true,
+    };
     config.resolve.alias = {
       ...config.resolve.alias,
     };
