@@ -7,12 +7,10 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   // For GitHub Pages deployment
-  // If deploying to https://<username>.github.io/<repo>/
-  // basePath and assetPrefix are set conditionally based on environment
-  ...(process.env.NODE_ENV === 'production' ? {
-    basePath: '/apron-react-bits',
-    assetPrefix: '/apron-react-bits',
-  } : {}),
+  // basePath is required for internal routing to work in subdirectory
+  basePath: process.env.NODE_ENV === 'production' ? '/apron-react-bits' : undefined,
+  // assetPrefix helps with static assets path
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/apron-react-bits' : undefined,
   
   // Ensure trailing slashes are handled correctly
   trailingSlash: true,
@@ -26,7 +24,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['sharp', 'onnxruntime-node'],
   
   // 配置 webpack（用于非 Turbopack 构建）
-  webpack: (config, { dir }) => {
+  webpack: (config, { dir, isServer, dev }) => {
     config.resolve = {
       ...config.resolve,
       symlinks: true,
@@ -34,6 +32,54 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
     };
+    
+    // For static exports, we need to handle asset prefixes properly
+    // We'll add a plugin to handle HTML asset paths
+    if (!isServer && !dev) { // Only in production builds for client-side bundles
+      config.plugins = config.plugins || [];
+      
+      // Custom plugin to modify HTML files after generation
+      class ModifyHtmlAssetsPlugin {
+        apply(compiler: any) {
+          compiler.hooks.emit.tapAsync('ModifyHtmlAssetsPlugin', (compilation: any, callback: any) => {
+            Object.keys(compilation.assets).forEach((filename) => {
+              if (filename.endsWith('.html')) {
+                let source = compilation.assets[filename].source().toString();
+                
+                // Replace absolute asset paths with basePath prefixed paths
+                // Only for assets that start with /assets/, /logo, or /facicon
+                source = source.replace(
+                  /(src|href|poster|data-src)=["'](\/(?:assets|logo|facicon)[^"']*)["']/g,
+                  (match: string, attr: string, assetPath: string) => {
+                    if (assetPath.startsWith('/assets/') || assetPath.startsWith('/logo') || assetPath.startsWith('/facicon')) {
+                      return `${attr}="/apron-react-bits${assetPath}"`;
+                    }
+                    return match;
+                  }
+                );
+                
+                // Also handle preload links in head
+                source = source.replace(
+                  /(<link[^>]*rel=["']preload["'][^>]*as=["']image["'][^>]*href=["'])(\/(?:assets|logo|facicon)[^"']*)(["'])/g,
+                  (match: string, prefix: string, assetPath: string, suffix: string) => {
+                    return `${prefix}/apron-react-bits${assetPath}${suffix}`;
+                  }
+                );
+                
+                compilation.assets[filename] = {
+                  source: () => source,
+                  size: () => source.length
+                };
+              }
+            });
+            callback();
+          });
+        }
+      }
+      
+      config.plugins.push(new ModifyHtmlAssetsPlugin());
+    }
+    
     return config;
   },
 };

@@ -55,7 +55,7 @@ export function PageFooter() {
               </div>
               <div className="version-tips">
                 <p>一个开源的组件集合。</p>
-                <p>这不是一个典型的组件库，<Link href="//apron.design">Apron Design</Link> 才是那个组件库。</p>
+                <p>这不是一个典型的组件库，<Link href="https://apron.design">Apron Design</Link> 才是那个组件库。</p>
                 <p>这些组件旨在通过为您的项目增添创意，帮助您脱颖而出，并在视觉上引人注目。</p>
               </div>
             </div>
@@ -66,10 +66,10 @@ export function PageFooter() {
               <Col span={6}>
                 <div className="footer-title">Apron Design</div>
                 <div className="footer-content">
-                  <Link href="//apron.design">首页</Link>
-                  <Link href="//apron.design/react">React</Link>
-                  <Link href="//apron.design/vue-next">Vue3</Link>
-                  <Link href="//apron.design/miniprogram">微信小程序</Link>
+                  <Link href="https://apron.design">首页</Link>
+                  <Link href="https://apron.design/react">React</Link>
+                  <Link href="https://apron.design/vue-next">Vue3</Link>
+                  <Link href="https://apron.design/miniprogram">微信小程序</Link>
                 </div>
               </Col>
               <Col span={6}>
@@ -92,7 +92,7 @@ export function PageFooter() {
                   <Link href="https://github.com/mitkimi/apron-react-bits" target="_blank">Github</Link>
                   <Link href="https://github.com/mitkimi/apron-react-bits/issues">常见问题</Link>
                   <Link href="https://github.com/mitkimi/apron-react-bits/blob/main/changelog.md">更新日志</Link>
-                  <Link href="//apron.design/guide/feedback">反馈与建议</Link>
+                  <Link href="https://apron.design/guide/feedback">反馈与建议</Link>
                 </div>
               </Col>
             </Row>
