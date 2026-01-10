@@ -19,11 +19,8 @@
   font-size: 16px;
 }
 
-.footer-logo img {
-  [data-prefers-color="dark"] & {
-    content: url('../assets/images/logo-dark.svg');
-  }
-}
+// Removed CSS content property approach due to Next.js static export limitations
+// Dark theme handling will be done via conditional rendering in component
 
 .version {
   margin-top: 40px;

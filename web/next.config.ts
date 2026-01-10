@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
   // Set asset prefix for GitHub Pages deployment
   assetPrefix: process.env.GITHUB_PAGES_BASE_PATH || '',
   
+  // Disable type generation to fix build issue
+  typedRoutes: false,
+  
   // Ensure trailing slashes are handled correctly
   trailingSlash: true,
   
@@ -22,10 +25,7 @@ const nextConfig: NextConfig = {
     unoptimized: true, // Important for static exports
   },
   
-  // Configure turbopack root directory to fix build issue
-  turbopack: {
-    root: path.resolve(process.cwd(), '..'),
-  },
+
   
   // Move serverComponentsExternalPackages from experimental to top-level
   serverExternalPackages: ['sharp', 'onnxruntime-node'],
@@ -34,8 +34,13 @@ const nextConfig: NextConfig = {
     BASE_PATH: process.env.GITHUB_PAGES_BASE_PATH || '',
   },
   
-  // 配置 webpack
-  webpack: (config, { dir, isServer, dev }) => {
+
+  
+  // Enable turbopack explicitly to avoid conflicts
+  turbopack: {},
+  
+  // Configure webpack for compatibility
+  webpack: (config, { isServer }) => {
     config.resolve = {
       ...config.resolve,
       symlinks: true,
