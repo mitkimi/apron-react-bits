@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   // Disable type generation to fix build issue
   typedRoutes: false,
   
-  // Enable turbopack with default settings
+  // Enable turbopack with basic settings
   turbopack: {},
    
  
