@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
    
  // Enable turbopack explicitly to avoid conflicts
  turbopack: {},
+   
+ 
   
   // Ensure trailing slashes are handled correctly
   trailingSlash: true,
