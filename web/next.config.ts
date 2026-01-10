@@ -15,10 +15,8 @@ const nextConfig: NextConfig = {
   // Disable type generation to fix build issue
   typedRoutes: false,
   
-  // Configure turbopack root for CI environments
-  turbopack: {
-    root: process.env.GITHUB_ACTIONS ? require('path').resolve(__dirname) : undefined,
-  },
+  // Enable turbopack with default settings to avoid workspace root inference issue
+  turbopack: {},
    
  
   
