@@ -3,19 +3,19 @@ import path from 'path';
 
 // Check if we're running a build command vs dev command
 // We'll use a custom environment variable that can be set during CI/CD
-const shouldUseBasePath = process.env.GITHUB_PAGES_BASE_PATH === '/apron-react-bits';
+const shouldUseBasePath = true;
 
 const nextConfig: NextConfig = {
-  // Conditionally apply basePath based on environment variable
-  basePath: process.env.GITHUB_PAGES_BASE_PATH || '',
+  // Apply basePath for GitHub Pages deployment
+  basePath: '/apron-react-bits',
   
   // Set asset prefix for GitHub Pages deployment
-  assetPrefix: process.env.GITHUB_PAGES_BASE_PATH || '',
+  assetPrefix: '/apron-react-bits',
   
   // Disable type generation to fix build issue
   typedRoutes: false,
   
-  // Enable turbopack with default settings
+  // Enable turbopack with basic settings
   turbopack: {},
    
  
@@ -36,7 +36,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['sharp', 'onnxruntime-node'],
   
   env: {
-    BASE_PATH: process.env.GITHUB_PAGES_BASE_PATH || '',
+    BASE_PATH: '/apron-react-bits',
   },
   
 
