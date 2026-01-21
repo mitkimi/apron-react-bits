@@ -39,10 +39,9 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build logo-particle-gather package
-        run: yarn build:logo-particle-gather
+        run: |
+          cd web
+          yarn install --frozen-lockfile
 
       - name: Build Next.js app
         run: npm run build

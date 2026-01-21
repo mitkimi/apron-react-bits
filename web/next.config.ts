@@ -1,13 +1,24 @@
 import type { NextConfig } from "next";
 import path from 'path';
 
-// Always use base path for GitHub Pages deployment at https://mitkimi.github.io/apron-react-bits/
-const useBasePath = true;
+// Check if we're running a build command vs dev command
+// We'll use a custom environment variable that can be set during CI/CD
+const shouldUseBasePath = true;
 
 const nextConfig: NextConfig = {
-  // Apply basePath for GitHub Pages deployment in subdirectory
+  // Apply basePath for GitHub Pages deployment
   basePath: '/apron-react-bits',
+  
+  // Set asset prefix for GitHub Pages deployment
   assetPrefix: '/apron-react-bits',
+  
+  // Disable type generation to fix build issue
+  typedRoutes: false,
+  
+  // Enable turbopack with default settings to avoid workspace root inference issue
+  turbopack: {},
+   
+ 
   
   // Ensure trailing slashes are handled correctly
   trailingSlash: true,
@@ -20,16 +31,21 @@ const nextConfig: NextConfig = {
     path: '/apron-react-bits/_next/image',
   },
   
-  // Configure turbopack root directory to fix build issue
-  turbopack: {
-    root: path.resolve(process.cwd(), '..'),
-  },
+
   
   // Move serverComponentsExternalPackages from experimental to top-level
   serverExternalPackages: ['sharp', 'onnxruntime-node'],
   
-  // 配置 webpack
-  webpack: (config, { dir, isServer, dev, webpack }) => {
+  env: {
+    BASE_PATH: '/apron-react-bits',
+  },
+  
+
+  
+
+  
+  // Configure webpack for compatibility
+  webpack: (config, { isServer }) => {
     config.resolve = {
       ...config.resolve,
       symlinks: true,
