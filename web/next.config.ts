@@ -15,8 +15,10 @@ const nextConfig: NextConfig = {
   // Disable type generation to fix build issue
   typedRoutes: false,
   
-  // Enable turbopack with default settings to avoid workspace root inference issue
-  turbopack: {},
+  // Enable turbopack with correct root directory to fix workspace root inference issue
+  turbopack: {
+    root: path.resolve(process.cwd(), '..'),
+  },
    
  
   
@@ -56,8 +58,9 @@ const nextConfig: NextConfig = {
     
     // Add DefinePlugin to expose the base path during build
     if (!isServer) {
+      const DefinePlugin = require('webpack').DefinePlugin;
       config.plugins.push(
-        new webpack.DefinePlugin({
+        new DefinePlugin({
           'process.env.BASE_PATH': JSON.stringify('/apron-react-bits'),
         })
       );
