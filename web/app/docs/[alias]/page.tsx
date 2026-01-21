@@ -17,21 +17,21 @@ const navigation = [
   {
     title: 'Apron React Bits',
     items: [
-      { label: '项目简介', href: '/docs/introduction' },
+      { label: '项目简介', href: '/apron-react-bits/docs/introduction' },
     ],
   },
   {
     title: '使用',
     items: [
-      { label: '安装', href: '/docs/installation' },
-      { label: '手动添加', href: '/docs/manual' },
+      { label: '安装', href: '/apron-react-bits/docs/installation' },
+      { label: '手动添加', href: '/apron-react-bits/docs/manual' },
     ]
   },
   {
     title: '贡献',
     items: [
-      { label: '开发者', href: '/docs/developer' },
-      { label: '贡献代码', href: '/docs/contribute' },
+      { label: '开发者', href: '/apron-react-bits/docs/developer' },
+      { label: '贡献代码', href: '/apron-react-bits/docs/contribute' },
     ]
   }
 ];

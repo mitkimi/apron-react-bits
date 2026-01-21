@@ -75,15 +75,15 @@ export function PageFooter() {
               <Col span={6}>
                 <div className="footer-title">文档</div>
                 <div className="footer-content">
-                  <Link href="/apron-react-bits/docs/installation">安装</Link>
-                  <Link href="/apron-react-bits/docs/usage">使用</Link>
-                  <Link href="/apron-react-bits/docs/components">组件</Link>
+                  <Link href="/docs/installation">安装</Link>
+                  <Link href="/docs/usage">使用</Link>
+                  <Link href="/docs/components">组件</Link>
                 </div>
               </Col>
               <Col span={6}>
                 <div className="footer-title">案例展示</div>
                 <div className="footer-content">
-                  <Link href="/apron-react-bits/showcases">案例展示</Link>
+                  <Link href="/showcases">案例展示</Link>
                 </div>
               </Col>
               <Col span={6}>

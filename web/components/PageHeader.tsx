@@ -81,26 +81,26 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
     if (href === '/' && pathname === '/') {
       return true;
     }
-    
+      
     // 对于根路径，不匹配其他路径
     if (href === '/') {
       return false;
     }
-    
+      
     // 移除尾部斜杠进行比较
-    const normalizedHref = href.replace(/\/$/, '');
-    const normalizedPathname = pathname.replace(/\/$/, '');
-    
+    const normalizedHref = href.replace(/\/\$/, '');
+    const normalizedPathname = pathname.replace(/\/\$/, '');
+      
     // 如果是精确匹配
     if (normalizedHref === normalizedPathname) {
       return true;
     }
-    
+      
     // 如果是前缀匹配（处理二级页面）
     if (normalizedPathname.startsWith(normalizedHref) && normalizedHref !== '') {
       return true;
     }
-    
+      
     return false;
   };
 

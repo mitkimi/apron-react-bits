@@ -15,7 +15,7 @@ const navigation = [
   {
     title: '',
     items: [
-      { label: '开始使用', href: '/components/getting-started' },
+      { label: '开始使用', href: '/apron-react-bits/components/getting-started' },
     ],
   },
   {
@@ -27,7 +27,7 @@ const navigation = [
   {
     title: '背景',
     items: [
-      { label: 'Logo 粒子聚集散开', href: '/components/logo-particle-gather' },
+      { label: 'Logo 粒子聚集散开', href: '/apron-react-bits/components/logo-particle-gather' },
     ],
   },
 ];
