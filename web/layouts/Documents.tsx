@@ -63,14 +63,8 @@ export function Documents({ navigation, children }: DocumentsProps) {
                 <ul className="nav-list">
                   {section.items.map((item, itemIndex) => {
                     // Normalize paths for comparison (remove trailing slash)
-                    let normalizedPathname = pathname.replace(/\/\$/, '');
-                    let normalizedHref = item.href.replace(/\/\$/, '');
-                                      
-                    // If pathname starts with /apron-react-bits but href doesn't, adjust href to include prefix
-                    if (normalizedPathname.startsWith('/apron-react-bits') && !normalizedHref.startsWith('/apron-react-bits')) {
-                      normalizedHref = '/apron-react-bits' + normalizedHref;
-                    }
-                                      
+                    const normalizedPathname = pathname.replace(/\/\$/, '');
+                    const normalizedHref = item.href.replace(/\/\$/, '');
                     const isActive = normalizedPathname === normalizedHref;
                     return (
                       <li 

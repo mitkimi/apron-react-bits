@@ -2,5 +2,5 @@ import { redirect } from 'next/navigation';
 
 export default function DocsRedirect() {
   // 自动跳转到第一个子页面
-  redirect('/apron-react-bits/docs/introduction');
+  redirect('/docs/introduction');
 }
