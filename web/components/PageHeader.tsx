@@ -81,26 +81,26 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
     if (href === '/' && pathname === '/') {
       return true;
     }
-    
+      
     // 对于根路径，不匹配其他路径
     if (href === '/') {
       return false;
     }
-    
+      
     // 移除尾部斜杠进行比较
-    const normalizedHref = href.replace(/\/$/, '');
-    const normalizedPathname = pathname.replace(/\/$/, '');
-    
+    const normalizedHref = href.replace(/\/\$/, '');
+    const normalizedPathname = pathname.replace(/\/\$/, '');
+      
     // 如果是精确匹配
     if (normalizedHref === normalizedPathname) {
       return true;
     }
-    
+      
     // 如果是前缀匹配（处理二级页面）
     if (normalizedPathname.startsWith(normalizedHref) && normalizedHref !== '') {
       return true;
     }
-    
+      
     return false;
   };
 
@@ -109,7 +109,7 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
     { href: '/docs', label: '文档' },
     { href: '/components', label: '组件' },
     { href: '/showcase', label: '展示' },
-    { href: '//apron.design', label: '回到 Apron Design' }
+    { href: 'https://apron.design', label: '回到 Apron Design' }
   ];
 
   return (
@@ -119,14 +119,14 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
           <Link href="/" className="page-header-logo">
             {/* 使用 CSS 控制 logo 切换，避免 hydration 错误 */}
             <Image
-              src="/assets/images/logo-light.svg"
+              src="/apron-react-bits/assets/images/logo-light.svg"
               alt="Logo"
               fill
               priority
               className="logo-light"
             />
             <Image
-              src="/assets/images/logo-dark.svg"
+              src="/apron-react-bits/assets/images/logo-dark.svg"
               alt="Logo"
               fill
               priority
@@ -157,7 +157,7 @@ export function PageHeader({ backgrounded }: PageHeaderProps) {
             aria-label="GitHub"
           >
             <Image
-              src="/assets/icons/github.svg"
+              src="/apron-react-bits/assets/icons/github.svg"
               alt="GitHub"
               width={24}
               height={24}

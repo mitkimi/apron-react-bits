@@ -63,7 +63,7 @@
 
 1. **修改 next.config.js**
    ```javascript
-   basePath: ''
+   const useBasePath = false;  // Change to false
    ```
 
 2. **修改 .github/workflows/deploy.yml**

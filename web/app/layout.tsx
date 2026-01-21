@@ -20,11 +20,11 @@ export const metadata: Metadata = {
   keywords: ["组件库", "React组件库", "UI组件", "开源组件库", "前端组件", "设计系统", "Apron Design", "C端组件", "跨端开发", "用户界面"],
   icons: {
     icon: [
-      { url: '/facicon.ico', sizes: '32x32', type: 'image/x-icon' },
-      { url: '/facicon.ico', sizes: '16x16', type: 'image/x-icon' },
+      { url: '/apron-react-bits/facicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/apron-react-bits/facicon.ico', sizes: '16x16', type: 'image/x-icon' },
     ],
-    shortcut: '/logo.png',
-    apple: '/logo.png',
+    shortcut: '/apron-react-bits/logo.png',
+    apple: '/apron-react-bits/logo.png',
   },
 };
 
@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
-        <link rel="icon" type="image/x-icon" href="/facicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/apron-react-bits/facicon.ico" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

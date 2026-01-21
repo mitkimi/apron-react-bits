@@ -13,7 +13,7 @@ function Demo() {
   return (
     <div style={{ width: '100%', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <LogoParticleGather
-        src="/assets/images/apron-design.png"
+        src="/apron-react-bits/assets/images/apron-design.png"
         gap={10}
         minSize={2}
         maxSize={6}
@@ -39,7 +39,7 @@ import LogoParticleGather from '@/components/bits/LogoParticleGather';
 function App() {
   return (
     <LogoParticleGather 
-      src="/assets/images/apron-design.png" 
+      src="/apron-react-bits/assets/images/apron-design.png" 
       gap={30} 
       minSize={6} 
       maxSize={30} 

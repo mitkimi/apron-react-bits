@@ -63,8 +63,8 @@ export function Documents({ navigation, children }: DocumentsProps) {
                 <ul className="nav-list">
                   {section.items.map((item, itemIndex) => {
                     // Normalize paths for comparison (remove trailing slash)
-                    const normalizedPathname = pathname.replace(/\/$/, '');
-                    const normalizedHref = item.href.replace(/\/$/, '');
+                    const normalizedPathname = pathname.replace(/\/\$/, '');
+                    const normalizedHref = item.href.replace(/\/\$/, '');
                     const isActive = normalizedPathname === normalizedHref;
                     return (
                       <li 

@@ -44,9 +44,7 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: Build Next.js app
-        run: |
-          cd web
-          yarn build
+        run: npm run build
         env:
           NODE_ENV: production
 
