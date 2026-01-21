@@ -50,3 +50,17 @@ npx @apron-design/cli add @apron-react-bits/LogoParticleGather
 
 - `npx @apron-design/cli add <component>` - Add a component to your project
 - `npx @apron-design/cli add <component> -d` - Add a component as dev dependency
+
+## Deployment with Base Path
+
+The website is configured to use the `/apron-react-bits` prefix by default for GitHub Pages deployment at https://mitkimi.github.io/apron-react-bits.
+
+```bash
+# Build with base path (automatically applied)
+yarn build
+
+# Or using npm
+npm run build
+```
+
+The base path is always active in the configuration, which applies the `/apron-react-bits` prefix to all routes and assets.

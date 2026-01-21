@@ -10,6 +10,7 @@
     "dev:web": "npm run dev --workspace=web",
     "build:logo-particle-gather": "npm run build --workspace=@apron-design/react-logo-particle-gather",
     "build:web": "npm run build --workspace=web",
+    "build:github": "npm run build --workspace=web",
     "lint": "npm run lint --workspaces --if-present"
   },
   "devDependencies": {

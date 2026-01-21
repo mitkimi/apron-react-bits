@@ -109,7 +109,7 @@ export function ThemeSwitcher() {
     if (themeMode === "light") {
       return (
         <Image
-          src="/assets/icons/sun.svg"
+          src="/apron-react-bits/assets/icons/sun.svg"
           alt="浅色模式"
           width={24}
           height={24}
@@ -119,7 +119,7 @@ export function ThemeSwitcher() {
     } else if (themeMode === "dark") {
       return (
         <Image
-          src="/assets/icons/moon.svg"
+          src="/apron-react-bits/assets/icons/moon.svg"
           alt="深色模式"
           width={24}
           height={24}
@@ -129,7 +129,7 @@ export function ThemeSwitcher() {
     } else {
       return (
         <Image
-          src="/assets/icons/with-system.svg"
+          src="/apron-react-bits/assets/icons/with-system.svg"
           alt="跟随系统"
           width={24}
           height={24}
@@ -140,9 +140,9 @@ export function ThemeSwitcher() {
   };
 
   const themeOptions = [
-    { label: "浅色模式", value: "light", icon: "/assets/icons/sun.svg" },
-    { label: "深色模式", value: "dark", icon: "/assets/icons/moon.svg" },
-    { label: "跟随系统", value: "system", icon: "/assets/icons/with-system.svg" }
+    { label: "浅色模式", value: "light", icon: "/apron-react-bits/assets/icons/sun.svg" },
+    { label: "深色模式", value: "dark", icon: "/apron-react-bits/assets/icons/moon.svg" },
+    { label: "跟随系统", value: "system", icon: "/apron-react-bits/assets/icons/with-system.svg" }
   ];
 
   // 点击外部关闭下拉菜单

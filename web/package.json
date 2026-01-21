@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev -p 1212",
     "build": "next build",
+    "build:github": "next build",
     "start": "next start -p 1212",
     "lint": "eslint"
   },
@@ -44,6 +45,7 @@
     "@types/nprogress": "^0.2.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.8",
     "sass": "^1.95.0",

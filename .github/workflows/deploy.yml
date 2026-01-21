@@ -45,10 +45,9 @@ jobs:
         run: yarn build:logo-particle-gather
 
       - name: Build Next.js app
-        run: yarn build:web
+        run: npm run build
         env:
           NODE_ENV: production
-          GITHUB_PAGES_BASE_PATH: /apron-react-bits
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

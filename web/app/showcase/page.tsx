@@ -12,9 +12,9 @@ const products = [
   {
     key: "yike-music",
     name: "一刻乐谱",
-    icon: "/assets/who-are-using/yike-music.png",
+    icon: "/apron-react-bits/assets/who-are-using/yike-music.png",
     description: "一刻乐谱是一款专业的乐谱制作与分享小程序，为音乐爱好者和专业人士提供简单易用的乐谱购买、下载工具。支持多种乐器，尤其是双排键、管风琴等乐器。",
-    screenshot: "/assets/showcases/iyikemusic.png",
+    screenshot: "/apron-react-bits/assets/showcases/iyikemusic.png",
     link: "https://iyikemusic.com"
   },
   // {
@@ -29,10 +29,10 @@ const products = [
   {
     key: "tg",
     name: "TG 个人站",
-    icon: "/assets/who-are-using/tg.png",
-    iconDark: "/assets/who-are-using/tg-dark.png",
+    icon: "/apron-react-bits/assets/who-are-using/tg.png",
+    iconDark: "/apron-react-bits/assets/who-are-using/tg-dark.png",
     description: "全栈工程师 · 后端工程师 · 前端工程师，潘钧挺的个人网站。",
-    screenshot: "/assets/showcases/tg.png",
+    screenshot: "/apron-react-bits/assets/showcases/tg.png",
     link: "https://tg98.cn"
   },
   // {
@@ -54,18 +54,18 @@ const products = [
   {
     key: "teleprompter",
     name: "提词器",
-    icon: "/assets/who-are-using/teleprompter.png",
+    icon: "/apron-react-bits/assets/who-are-using/teleprompter.png",
     description: "提词器是一款专为视频创作者打造的智能提词应用，支持可调节的滚动速度、镜像模式和多种主题。让你的视频拍摄更加流畅自然，告别忘词尴尬。同时支持在线编辑、远程遥控等功能。",
-    screenshot: "/assets/showcases/teleprompter.png",
+    screenshot: "/apron-react-bits/assets/showcases/teleprompter.png",
     link: "https://offontime.com/products/teleprompter"
   },
   {
     key: "davinci",
     name: "DAVINCI",
-    icon: "/assets/who-are-using/davinci.png",
-    iconDark: "/assets/who-are-using/davinci-dark.png",
+    icon: "/apron-react-bits/assets/who-are-using/davinci.png",
+    iconDark: "/apron-react-bits/assets/who-are-using/davinci-dark.png",
     description: "DAVINCI 是一个乳胶时装、紧身时装品牌，主打高品质、舒适、时尚的乳胶服装制品、莱卡服装制品、配饰等等。是都市年轻人追求的品牌。",
-    screenshot: "/assets/showcases/davinci.png",
+    screenshot: "/apron-react-bits/assets/showcases/davinci.png",
     link: "https://davincilatex.com"
   }
 ];

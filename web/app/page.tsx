@@ -85,7 +85,7 @@ export default function Home() {
           <div className="home-hero-background">
             <div style={{ width: '100%', height: '100%' }}>
               <LogoParticleGather
-                src="/assets/images/apron-design.png"
+                src="/apron-react-bits/assets/images/apron-design.png"
                 gap={30}
                 minSize={6}
                 maxSize={30}
@@ -99,8 +99,8 @@ export default function Home() {
           </div>
           {showLogoContainer && (
             <div ref={logoContainerRef} className="home-logo-container">
-              <img src="/assets/images/apron-design.png" className="home-logo light-only" alt="Apron Design" />
-              <img src="/assets/images/apron-design-dark.png" className="home-logo dark-only" alt="Apron Design" />
+              <img src="/apron-react-bits/assets/images/apron-design.png" className="home-logo light-only" alt="Apron Design" />
+              <img src="/apron-react-bits/assets/images/apron-design-dark.png" className="home-logo dark-only" alt="Apron Design" />
             </div>
           )}
           {/* Content */}
